@@ -317,6 +317,7 @@
     <Compile Include="Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Logic\MatchManager.cs" />
     <Compile Include="Master Pages\Home.Master.cs">
       <DependentUpon>Home.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -324,7 +325,6 @@
     <Compile Include="Master Pages\Home.Master.designer.cs">
       <DependentUpon>Home.Master</DependentUpon>
     </Compile>
-    <Compile Include="Logic\MatchManager.cs" />
     <Compile Include="Logic\NameGenerator.cs" />
     <Compile Include="Logic\PopulateTeams.cs" />
     <Compile Include="Logic\Randomizer.cs" />
