@@ -10,19 +10,21 @@ namespace Elifoot.Logic
     {
         private static Random rand = new Random();
 
-        public static void CreateLeagues() {
+        public static void CreateLeagues()
+        {
             using (var db = new TeamContext())
             {
                 var prize = 100000000;
                 for (int i = 1; i < 5; i++)
                 {
-                    var league = new League(i+"ª Divisão");
+                    var league = new League(i + "ª Divisão");
                     league.Division = i;
                     league.FirstPrize = prize / i;
                     league.SecondPrize = league.FirstPrize / 2;
                     league.ThirdPrize = league.ThirdPrize / 2;
                     league.Teams = CreateTeams(i);
                     db.Leagues.Add(league);
+                    CreateJourneys(league);
                 }
                 db.SaveChanges();
             }
@@ -50,10 +52,56 @@ namespace Elifoot.Logic
             }
         }
 
+
+        public static bool CreateJourneys(League l)
+        {
+            var teams = l.Teams;
+            //1st round
+            List<Match> firstRoundMatches = new List<Match>();
+
+            int journeyCount = 0;
+
+            List<Team> homeTeams = new List<Team>();
+            List<Team> awayTeams = new List<Team>();
+
+            Team controlTeam = teams[2];
+
+            homeTeams = teams.Skip(0).Take(teams.Count / 2).ToList();
+            awayTeams = teams.Skip(teams.Count / 2).Take(teams.Count / 2).ToList();
+            controlTeam = homeTeams[2];
+
+            while (homeTeams[2] != controlTeam || journeyCount == 0)
+            {
+                if (journeyCount != 0)               
+                {
+                    awayTeams.Add(homeTeams.Last());
+                    homeTeams.Remove(homeTeams.Last());
+
+                    homeTeams.Insert(2, awayTeams.First());
+                    awayTeams.RemoveAt(1);
+                }
+
+                Journey j = new Journey(journeyCount.ToString());
+
+                for (int i = 0; i < homeTeams.Count;i++ )
+                {
+                    Match m = new Match(homeTeams[i], awayTeams[i]);
+                    j.Matchs.Add(m);
+                }                
+
+                    journeyCount++;
+            }
+
+            return true;
+        }
+
+
         public static void CreatePlayers(Team team, int division)
         {
+
             using (var db = new TeamContext())
             {
+
                 for (int i = 0; i < 22; i++)
                 {
                     Player p = generatePlayer(division);
@@ -76,7 +124,7 @@ namespace Elifoot.Logic
             p.OverallPower = (p.Strength + p.Stamina + p.Technick) / 3;
             p.MarketValue = generateMarketValue(p.OverallPower, p.Age);
             p.Salary = Math.Floor(p.MarketValue / 20);
-            
+
             return p;
         }
 
