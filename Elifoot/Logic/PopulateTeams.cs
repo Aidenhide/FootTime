@@ -57,7 +57,6 @@ namespace Elifoot.Logic
                 for (int i = 0; i < 22; i++)
                 {
                     Player p = generatePlayer(division);
-                    p.Salary = 1000 * i;
                     TeamManager.AddPlayerToTeam(p, team);
                 }
             }
@@ -66,15 +65,17 @@ namespace Elifoot.Logic
         public static Player generatePlayer(int division)
         {
             var count = new NameGenerator().Names.Count;
-            Player p = new Player(new NameGenerator().Names[rand.Next(count)]);
-            p.Age = rand.Next(38) + 16;
+            Player p = new Player(new NameGenerator().Names[rand.Next(count)] + " " + new NameGenerator().Names[rand.Next(count)]);
+            p.Age = rand.Next(22) + 16;
             p.Injured = false;
             p.Nationality = Nationality.Portugal;
             p.Stamina = generateStat(division);
             p.Strength = generateStat(division);
             p.Technick = generateStat(division);
+            p.Experience = generateStat(division);
             p.OverallPower = (p.Strength + p.Stamina + p.Technick) / 3;
             p.MarketValue = generateMarketValue(p.OverallPower, p.Age);
+            p.Salary = Math.Floor(p.MarketValue / 20);
             
             return p;
         }
@@ -83,10 +84,10 @@ namespace Elifoot.Logic
         {
             switch (division)
             {
-                case 1: return rand.Next(80) + 50;
-                case 2: return rand.Next(60) + 40;
-                case 3: return rand.Next(40) + 25;
-                case 4: return rand.Next(25) + 10;
+                case 1: return rand.Next(30) + 50;
+                case 2: return rand.Next(20) + 40;
+                case 3: return rand.Next(15) + 25;
+                case 4: return rand.Next(15);
                 default: return 0;
             }
         }

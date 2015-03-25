@@ -7,23 +7,26 @@ namespace Elifoot.Logic
 {
     public class NameGenerator
     {
-        private NameGenerator nameGenerator;
-        List<string> nameList;
+        List<string> nameList = new List<string>();
         private void getNames()
         {
-            string text = System.IO.File.ReadAllText("C:/Users/Fabio Pacheco/documents/visual studio 2013/Projects/Elifoot/Elifoot/Content/NameList.txt");
-            nameList = new List<string>(text.Split());
+            string[] text = System.IO.File.ReadAllLines("C:/Users/Fabio Pacheco/documents/visual studio 2013/Projects/Elifoot/Elifoot/Content/NameList.txt");
+
+            foreach (string x in text)
+            {
+                nameList.AddRange(x.Trim().Split());
+            }
+            
         }
 
         public NameGenerator()
         {
-
         }
 
         public List<string> Names
         {
             get {
-                if(nameList != null) {
+                if(nameList.Count != 0) {
                     return nameList;
                 }
                 else
