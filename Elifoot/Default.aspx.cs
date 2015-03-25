@@ -38,6 +38,7 @@ namespace Elifoot
 
         protected void b_generateTeams_Click(object sender, EventArgs e)
         {
+            
             using (var db = new TeamContext())
             {
                 PopulateTeams.CreateLeagues();

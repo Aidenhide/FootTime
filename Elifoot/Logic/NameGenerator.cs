@@ -10,7 +10,8 @@ namespace Elifoot.Logic
         List<string> nameList = new List<string>();
         private void getNames()
         {
-            string[] text = System.IO.File.ReadAllLines("C:/Users/Fabio Pacheco/documents/visual studio 2013/Projects/Elifoot/Elifoot/Content/NameList.txt");
+            string[] text = System.IO.File.ReadAllLines("C:/Users/Nuno Teixeira/Desktop/NameList.txt");
+            //C:/Users/Nuno Teixeira/Desktop/NameList.txt
 
             foreach (string x in text)
             {
