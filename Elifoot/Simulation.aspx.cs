@@ -31,5 +31,14 @@ namespace Elifoot
             matchRepeater.DataSource = league.Journeys.Where(x => x.JourneyId == league.CurrentJourney).FirstOrDefault().Matchs;
             matchRepeater.DataBind();
         }
+
+        protected void MatchRepeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            var match = e.Item.DataItem as Match;
+            var house = (Label)e.Item.FindControl("l_house");
+            house.Text = match.House.Name;
+            var visitor = (Label)e.Item.FindControl("l_visitor");
+            visitor.Text = match.Visitor.Name;
+        }
     }
 }
