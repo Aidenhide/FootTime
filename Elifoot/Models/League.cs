@@ -70,8 +70,6 @@ namespace Elifoot.Models
 
         public decimal ThirdPrize { get; set; }
 
-        public List<Referee> Referees { get; set; }
-
         public virtual IList<Referee> Referees
         {
             get
