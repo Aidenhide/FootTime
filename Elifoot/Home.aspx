@@ -15,17 +15,17 @@
                         <HeaderTemplate>
                             <div class="row">
                                 <div class="col-12-md">
-                                    <table>
-                                        <tr>
+                                    <table class="homeTable">
+                                        <tr class="text-center">
                                             <th>Posição</th>
                                             <th>Nome</th>
                                             <th>Idade</th>
                                             <th>País</th>
                                             <th>Lesão</th>
-                                            <th>Resistência</th>
-                                            <th>Força</th>
-                                            <th>Técnica</th>
-                                            <th>Experiência</th>
+                                            <th>RES</th>
+                                            <th>FOR</th>
+                                            <th>TEC</th>
+                                            <th>EXP</th>
                                             <th>Total</th>
                                             <th>Salário</th>
                                             <th>Valor</th>
@@ -35,14 +35,14 @@
                             <tr>
                                 <td><%# DataBinder.Eval(Container.DataItem, "Position") %></td>
                                 <td><%# DataBinder.Eval(Container.DataItem, "Name") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Age") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Age") %></td>
                                 <td><%# DataBinder.Eval(Container.DataItem, "Nationality") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Injured") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Stamina") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Strength") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Technick") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "Experience") %></td>
-                                <td><%# DataBinder.Eval(Container.DataItem, "OverallPower") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Injured") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Stamina") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Strength") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Technick") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "Experience") %></td>
+                                <td class="tdSmall"><%# DataBinder.Eval(Container.DataItem, "OverallPower") %></td>
                                 <td><%# DataBinder.Eval(Container.DataItem, "Salary") %></td>
                                 <td><%# DataBinder.Eval(Container.DataItem, "MarketValue") %></td>
                             </tr>

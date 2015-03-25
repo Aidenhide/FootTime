@@ -27,3 +27,31 @@ input[type="email"] {
         padding: 0;
     }
 }
+
+
+/* HOME */
+
+.homeTable {
+    border: 1px black solid;
+    font-size:small;
+}
+
+.homeTable > td {
+    margin:auto;
+}
+
+.homeTable, tr {
+    border-bottom: 1px solid #808080;
+}
+
+.homeTable, tr:nth-child(even) {
+    background: #CCC
+}
+.homeTable, tr:nth-child(odd) {
+    background: #FFF;
+}
+
+.tdSmall {
+    width:8%;
+    text-align:center;
+}

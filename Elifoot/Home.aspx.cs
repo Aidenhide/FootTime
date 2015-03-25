@@ -12,7 +12,7 @@ namespace Elifoot
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            loadTeam();
         }
 
         protected void loadTeam()
@@ -22,7 +22,8 @@ namespace Elifoot
                 var teams = db.Teams.ToList();
                 if (teams != null)
                 {
-                    repeaterTeam.DataSource = teams.Take(1);
+                    var team = teams.FirstOrDefault();
+                    repeaterTeam.DataSource = team.Players;
                     repeaterTeam.DataBind();
                 }
             }
