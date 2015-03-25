@@ -21,7 +21,21 @@ namespace Elifoot.Models
         
         public string Name { get; set; }
 
-        public int Journey { get; set; }
+        public int CurrentJourney { get; set; }
+
+        public virtual IList<Journey> Journeys
+        {
+            get
+            {
+                return _Journey;
+            }
+            set
+            {
+                _Journey = value;
+            }
+        }
+
+        private IList<Journey> _Journey;
 
         public virtual IList<Team> Teams
         {

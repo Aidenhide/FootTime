@@ -10,6 +10,7 @@ namespace Elifoot.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "Elifoot.Models.TeamContext";
         }
 
