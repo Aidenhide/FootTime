@@ -67,5 +67,12 @@ namespace Elifoot
                 }
             }
         }
+
+        protected void b_simulate_Click(object sender, EventArgs e)
+        {
+            MatchManager mm = new MatchManager();
+            mm.beginSimulation();
+            Response.Redirect("Simulation.aspx");
+        }
     }
 }

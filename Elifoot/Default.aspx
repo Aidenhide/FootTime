@@ -41,7 +41,6 @@
 
 
     <div class="row">
-        <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox><asp:Button ID="b_createPlayer" runat="server" Text="Button" />
-        <%-- ADICOONAR JOGADORES --%>
+        <asp:Button ID="b_simulate" runat="server" Text="Simular" OnClick="b_simulate_Click" />
     </div>
 </asp:Content>

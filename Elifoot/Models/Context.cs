@@ -15,6 +15,7 @@ namespace Elifoot.Models
         public DbSet<Team> Teams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<League> Leagues { get; set; }
+        public DbSet<Journey> Journeys { get; set; }
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<Referee> Referees { get; set; }

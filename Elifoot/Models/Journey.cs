@@ -13,10 +13,12 @@ namespace Elifoot.Models
         {
             Name = name;
         }
-
         [Key]
         public int JourneyId { get; set; }
+
         public string Name { get; set; }
+
+        public int Number { get; set; }
 
         public virtual IList<Match> Matchs
         {

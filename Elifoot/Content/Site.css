@@ -31,27 +31,84 @@ input[type="email"] {
 
 /* HOME */
 
-.homeTable {
+.home-table {
+    margin-top:5px;
     border: 1px black solid;
     font-size:small;
+    width:100%;
 }
 
-.homeTable > td {
+.home-table > td {
     margin:auto;
 }
 
-.homeTable, tr {
+.home-table, tr {
     border-bottom: 1px solid #808080;
 }
 
-.homeTable, tr:nth-child(even) {
+.home-table, tr:nth-child(even) {
     background: #CCC
 }
-.homeTable, tr:nth-child(odd) {
+.home-table, tr:nth-child(odd) {
     background: #FFF;
 }
 
-.tdSmall {
-    width:8%;
+.home-table, th {
     text-align:center;
+}
+
+
+.td-small {
+    width:6%;
+}
+.td-medium {
+    width:10%;
+}
+.td-big {
+    width:17%;
+}
+
+.club-panel {
+    border: 2px solid black;
+    border-radius: 2px 2px;
+}
+
+.game-panel {
+    border: 2px solid black;
+    border-radius: 2px 2px;
+}
+
+.manager-panel {
+    border: 2px solid black;
+    border-radius: 2px 2px;
+}
+.side-menu {
+    margin-left:0;
+    margin-right:0;
+    padding-left:0;
+    padding-right:0;
+}
+
+.menu-option {
+    margin-top:5px;
+    width:100%;
+    line-height:40px;
+    height:40px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 2px 2px;
+    background-color: black;
+}
+a:hover, a:visited, a:active, a:link {
+    text-decoration:none;
+}
+
+.menu-lk {
+    color:white;
+    font-weight:900;
+}
+
+.menu-lk:hover {
+    color:yellow;
+    font-weight:900;
 }

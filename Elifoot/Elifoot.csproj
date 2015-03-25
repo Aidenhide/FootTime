@@ -169,6 +169,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
+    <Content Include="Master Pages\Home.Master" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -202,12 +203,13 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Site.Master" />
+    <Content Include="Simulation.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Site.Master" />
     <Content Include="Site.Mobile.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -315,8 +317,17 @@
     <Compile Include="Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Master Pages\Home.Master.cs">
+      <DependentUpon>Home.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Master Pages\Home.Master.designer.cs">
+      <DependentUpon>Home.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Logic\MatchManager.cs" />
     <Compile Include="Logic\NameGenerator.cs" />
     <Compile Include="Logic\PopulateTeams.cs" />
+    <Compile Include="Logic\Randomizer.cs" />
     <Compile Include="Logic\TeamManager.cs" />
     <Compile Include="Migrations\201503241350483_InitialCreate.cs" />
     <Compile Include="Migrations\201503241350483_InitialCreate.Designer.cs">
@@ -329,6 +340,14 @@
     <Compile Include="Migrations\201503251047564_minor.cs" />
     <Compile Include="Migrations\201503251047564_minor.Designer.cs">
       <DependentUpon>201503251047564_minor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503251715027_Crap.cs" />
+    <Compile Include="Migrations\201503251715027_Crap.Designer.cs">
+      <DependentUpon>201503251715027_Crap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503251747114_Crap2.cs" />
+    <Compile Include="Migrations\201503251747114_Crap2.Designer.cs">
+      <DependentUpon>201503251747114_Crap2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BuyingOffer.cs" />
@@ -343,19 +362,12 @@
     <Compile Include="Models\Stadium.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
+    <Compile Include="Simulation.aspx.cs">
+      <DependentUpon>Simulation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Site.Mobile.Master.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Site.Mobile.Master.designer.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    <Compile Include="Simulation.aspx.designer.cs">
+      <DependentUpon>Simulation.aspx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
@@ -379,6 +391,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503251047564_minor.resx">
       <DependentUpon>201503251047564_minor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503251715027_Crap.resx">
+      <DependentUpon>201503251715027_Crap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503251747114_Crap2.resx">
+      <DependentUpon>201503251747114_Crap2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
