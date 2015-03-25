@@ -24,7 +24,13 @@ namespace Elifoot.Models
         {
             get
             {
-                return _Matchs;
+                if (_Matchs != null)
+                    return _Matchs;
+                else
+                {
+                    _Matchs = new List<Match>();
+                    return _Matchs;
+                }
             }
             set
             {

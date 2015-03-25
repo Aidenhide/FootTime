@@ -24,7 +24,13 @@ namespace Elifoot.Models
         {
             get
             {
-                return _Players;
+                if (_Players != null)
+                    return _Players;
+                else
+                {
+                    _Players = new List<Player>();
+                    return _Players;
+                }
             }
             set
             {

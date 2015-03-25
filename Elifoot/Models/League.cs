@@ -27,7 +27,14 @@ namespace Elifoot.Models
         {
             get
             {
-                return _Journey;
+                if(_Journey != null)
+                    return _Journey;
+                else
+                {
+                    _Journey = new List<Journey>();
+                    return _Journey;
+                }
+                    
             }
             set
             {
@@ -41,7 +48,13 @@ namespace Elifoot.Models
         {
             get
             {
-                return _Teams;
+                if (_Teams != null)
+                    return _Teams;
+                else
+                {
+                    _Teams = new List<Team>();
+                    return _Teams;
+                }
             }
             set
             {
@@ -58,5 +71,25 @@ namespace Elifoot.Models
         public decimal ThirdPrize { get; set; }
 
         public List<Referee> Referees { get; set; }
+
+        public virtual IList<Referee> Referees
+        {
+            get
+            {
+                if (_Referees != null)
+                    return _Referees;
+                else
+                {
+                    _Referees = new List<Referee>();
+                    return _Referees;
+                }
+            }
+            set
+            {
+                _Referees = value;
+            }
+        }
+
+        private IList<Referee> _Referees;
     }
 }
