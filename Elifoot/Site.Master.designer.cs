@@ -10,7 +10,7 @@
 namespace Elifoot {
     
     
-    public partial class SiteMaster {
+    public partial class Site {
         
         /// <summary>
         /// MainContent control.
