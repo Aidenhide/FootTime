@@ -7,7 +7,7 @@ namespace Elifoot.Utils
 {
     public static class HelperMethods
     {
-        public static void Shuffle<T>(this IList<T> list)
+        public static void Shuffle<T>(this List<T> list)
         {
             Random rng = new Random();
             int n = list.Count;
