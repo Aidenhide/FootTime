@@ -12,7 +12,9 @@ namespace Elifoot.Models
         public Match(Team house, Team visitor)
         {
             House = house;
+            HouseName = house.Name;
             Visitor = visitor;
+            VisitorName = visitor.Name;
         }
 
         [Key]
@@ -21,6 +23,10 @@ namespace Elifoot.Models
         public Team House { get; set; }
 
         public Team Visitor { get; set; }
+
+        public string HouseName { get; set; }
+
+        public string VisitorName { get; set; }
 
         public int HouseScore { get; set; }
 

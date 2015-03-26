@@ -27,18 +27,13 @@ namespace Elifoot
         protected void leagueRepeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             var league = e.Item.DataItem as League;
-            var matchRepeater = (Repeater)e.Item.FindControl("MatchRepeater");
-            matchRepeater.DataSource = league.Journeys.Where(x => x.JourneyId == league.CurrentJourney).FirstOrDefault().Matchs;
-            matchRepeater.DataBind();
-        }
+            if (league != null)
+            {
 
-        protected void MatchRepeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            var match = e.Item.DataItem as Match;
-            var house = (Label)e.Item.FindControl("l_house");
-            house.Text = match.House.Name;
-            var visitor = (Label)e.Item.FindControl("l_visitor");
-            visitor.Text = match.Visitor.Name;
+                var matchRepeater = (Repeater)e.Item.FindControl("MatchRepeater");
+                matchRepeater.DataSource = league.Journeys.Where(x => x.JourneyId == league.CurrentJourney).FirstOrDefault().Matchs;
+                matchRepeater.DataBind();
+            }
         }
     }
 }

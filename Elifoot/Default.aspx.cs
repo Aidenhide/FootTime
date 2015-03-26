@@ -13,7 +13,7 @@ namespace Elifoot
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //loadTeams();
+            loadTeams();
         }
 
         protected void b_team_Click(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace Elifoot
             using (var db = new TeamContext())
             {
                 var teams = db.Teams.ToList();
-                if (teams != null)
+                if (teams.Count > 0)
                 {
                     lv_teams.DataSource = teams;
                     lv_teams.DataBind();

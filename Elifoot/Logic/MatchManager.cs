@@ -23,11 +23,13 @@ namespace Elifoot.Logic
         public void ThreadSimulation()
         {
             var time = 0;
-            while (time < 90)
+            while (time < 91)
             {
                 Simulate(time);
+                System.Threading.Thread.Sleep(1000);
                 time++;
             }
+            // Next journey
         }
 
         private void Simulate(int time)
@@ -43,6 +45,7 @@ namespace Elifoot.Logic
                         CalculateMatch(match);
                     }
                 }
+                db.SaveChanges();
             }
         }
 
@@ -54,10 +57,11 @@ namespace Elifoot.Logic
             {
                 match.HouseScore++;
             }
-            if (house == 50)
+            if (visitor == 50)
             {
                 match.VisitorScore++;
             }
+
             //if(WhoHasTheBall(match.House, match.Visitor) == 0) {
             //    Attacking(match.House, match.Visitor);
             //}

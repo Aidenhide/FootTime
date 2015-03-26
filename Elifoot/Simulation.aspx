@@ -9,20 +9,21 @@
                 <asp:Label ID="l_leagueName" runat="server" Text='<%# Eval("Name") %>' />
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:Repeater ID="MatchRepeater" runat="server" OnItemDataBound="MatchRepeater_ItemDataBound">
+                <asp:Repeater ID="MatchRepeater" runat="server">
                     <ItemTemplate>
                         <div class="row">
                             <div class="col-md-5">
-                                <asp:Label ID="l_home" runat="server"/>
+                                <asp:Label ID="l_house" runat="server" Text='<%# Eval("HouseName") %>'/>
                             </div>
                             <div class="col-md-1">
-                                <asp:Label ID="l_homeScore" runat="server" Text='<%# Eval("HomeScore") %>' />
+                                <asp:Label ID="l_houseScore" runat="server" Text='<%# Eval("HouseScore") %>' />
                             </div>
                             <div class="col-md-1">
-                                <asp:Label ID="l_visitor" runat="server"/>
+                                <asp:Label ID="l_visitoScore" runat="server" Text='<%# Eval("VisitorScore") %>'/>
                             </div>
                             <div class="col-md-5">
-                                <asp:Label ID="l_visitorScore" runat="server" Text='<%# Eval("VisitorScore") %>' />
+                                <asp:Label ID="l_visitor" runat="server" Text='<%# Eval("VisitorName") %>' />
+                                <span>TEMPO: <%# Eval("Time") %></span>
                             </div>
                         </div>
                     </ItemTemplate>
