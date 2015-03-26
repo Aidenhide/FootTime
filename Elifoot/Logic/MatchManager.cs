@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Elifoot.Models;
+using System.Threading;
 
 namespace Elifoot.Logic
 {
@@ -15,17 +16,18 @@ namespace Elifoot.Logic
 
         public void beginSimulation()
         {
-            using (var db = new TeamContext())
-            {
-                var time = 0;
-                while (time < 90)
-                {
-                    Simulate(time);
-                    System.Threading.Thread.Sleep(1000);
-                    time++;
-                }
-            }
+            Thread s = new Thread(new ThreadStart(ThreadSimulation));
+            s.Start();
+        }
 
+        public void ThreadSimulation()
+        {
+            var time = 0;
+            while (time < 90)
+            {
+                Simulate(time);
+                time++;
+            }
         }
 
         private void Simulate(int time)
@@ -56,6 +58,44 @@ namespace Elifoot.Logic
             {
                 match.VisitorScore++;
             }
+            //if(WhoHasTheBall(match.House, match.Visitor) == 0) {
+            //    Attacking(match.House, match.Visitor);
+            //}
+        }
+
+
+        private int WhoHasTheBall(Team a, Team b) 
+        {
+            var apower = a.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
+            var bpower = b.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
+            apower = apower + Randomizer.GetRandomizer.Next(50);
+            bpower = bpower + Randomizer.GetRandomizer.Next(50);
+
+            if (apower > bpower)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        private void Attacking(Team Attacker, Team Defender)
+        {
+            var apower = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).Sum(x => x.OverallPower);
+            var bpower = Defender.Players.Where(x => x.Position == PlayerPosition.Defender).Sum(x => x.OverallPower);
+
+            apower = apower + Randomizer.GetRandomizer.Next(50);
+            bpower = bpower + Randomizer.GetRandomizer.Next(50);
+
+            if (apower > bpower)
+            {
+                var count = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
+                var r = Randomizer.GetRandomizer.Next(count);
+                var shooter = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+                var keeper = Defender.Players.Where(x => x.Position == PlayerPosition.GoalKeeper);
+                // YOLO
+            }
+
+            
         }
     }
 }
