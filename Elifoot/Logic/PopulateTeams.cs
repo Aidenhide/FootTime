@@ -23,8 +23,10 @@ namespace Elifoot.Logic
                     league.SecondPrize = league.FirstPrize / 2;
                     league.ThirdPrize = league.ThirdPrize / 2;
                     league.Teams = CreateTeams(i);
+                    CreateJourneys( ref league);
                     db.Leagues.Add(league);
-                    CreateJourneys(league);
+                    db.Journeys.AddRange(league.Journeys);
+                   
                 }
                 db.SaveChanges();
             }
@@ -53,7 +55,7 @@ namespace Elifoot.Logic
         }
 
 
-        public static bool CreateJourneys(League l)
+        public static bool CreateJourneys(ref League l)
         {
             var teams = l.Teams;
             //1st round
@@ -66,32 +68,55 @@ namespace Elifoot.Logic
 
             Team controlTeam = teams[2];
 
+            int controlVar = 0;
+
             homeTeams = teams.Skip(0).Take(teams.Count / 2).ToList();
             awayTeams = teams.Skip(teams.Count / 2).Take(teams.Count / 2).ToList();
-            controlTeam = homeTeams[2];
+            controlTeam = homeTeams[1];
 
-            while (homeTeams[2] != controlTeam || journeyCount == 0)
+            List<Journey> leagueJourneys = new List<Journey>();
+
+            while (homeTeams[1].TeamId != controlTeam.TeamId || journeyCount <= 1)
             {
-                if (journeyCount != 0)               
-                {
-                    awayTeams.Add(homeTeams.Last());
-                    homeTeams.Remove(homeTeams.Last());
-
-                    homeTeams.Insert(2, awayTeams.First());
-                    awayTeams.RemoveAt(1);
-                }
-
                 Journey j = new Journey(journeyCount.ToString());
 
-                for (int i = 0; i < homeTeams.Count;i++ )
+                for (int i = 0; i < homeTeams.Count; i++)
                 {
-                    Match m = new Match(homeTeams[i], awayTeams[i]);
+                    Match m;
+                    if (controlVar % 2 == 0)
+                        m = new Match(homeTeams[i], awayTeams[i]);
+                    else
+                        m = new Match(awayTeams[i], homeTeams[i]);
                     j.Matchs.Add(m);
-                }                
+                }
+                leagueJourneys.Add(j);
+                l.Journeys.Add(j);
+                journeyCount++;
 
-                    journeyCount++;
+                awayTeams.Add(homeTeams.Last());
+                homeTeams.Remove(homeTeams.Last());
+
+                homeTeams.Insert(1, awayTeams.First());
+                awayTeams.RemoveAt(0);
             }
+            /// 2nd round
+            /// 
 
+            for (int i = 0; i < journeyCount; i++)
+            {
+                Journey j = leagueJourneys[i];
+
+                Journey srJourney = new Journey((journeyCount + i).ToString());
+
+                foreach (Match frMatch in j.Matchs)
+                {
+                    Match srMatch = new Match(frMatch.Visitor, frMatch.House);
+                    srJourney.Matchs.Add(srMatch);
+                }
+
+                leagueJourneys.Add(srJourney);
+                l.Journeys.Add(srJourney);
+            }
             return true;
         }
 
