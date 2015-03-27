@@ -186,6 +186,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Home.aspx" />
+    <Content Include="NewGame.aspx" />
     <Content Include="packages.config" />
     <Content Include="Account\Web.config" />
     <Content Include="Scripts\bootstrap.js" />
@@ -395,6 +396,13 @@
     <Compile Include="Models\Referee.cs" />
     <Compile Include="Models\Stadium.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="NewGame.aspx.cs">
+      <DependentUpon>NewGame.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NewGame.aspx.designer.cs">
+      <DependentUpon>NewGame.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation.aspx.cs">
       <DependentUpon>Simulation.aspx</DependentUpon>
