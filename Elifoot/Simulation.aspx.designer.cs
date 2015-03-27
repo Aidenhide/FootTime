@@ -13,6 +13,15 @@ namespace Elifoot {
     public partial class Simulation {
         
         /// <summary>
+        /// l_journey control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label l_journey;
+        
+        /// <summary>
         /// leagueRepeater control.
         /// </summary>
         /// <remarks>

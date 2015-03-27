@@ -45,6 +45,7 @@ namespace Elifoot.Logic
                         CalculateMatch(match);
                     }
                 }
+                nextJorney(db.Leagues.ToList());
                 db.SaveChanges();
             }
         }
@@ -100,6 +101,24 @@ namespace Elifoot.Logic
             }
 
             
+        }
+
+        private void nextJorney(List<League> leagues)
+        {
+            foreach (League l in leagues)
+            {
+                var actual = l.Journeys.Where(x => x.JourneyId == l.CurrentJourney).FirstOrDefault();
+                var next = l.Journeys.Where(x => x.Number == actual.Number + 1).FirstOrDefault();
+
+                if (next != null)
+                {
+                    l.CurrentJourney = next.JourneyId;
+                }
+                else
+                {
+                    // Acabou a temporada
+                }
+            }
         }
     }
 }
