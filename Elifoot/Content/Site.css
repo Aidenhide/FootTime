@@ -132,3 +132,24 @@ a:hover, a:visited, a:active, a:link {
     font-weight:bold;
 
 }
+
+
+/* ADMIN PAGE */
+
+.global-stats-table {
+    width:30%;
+    font-weight:bold;
+    font-size:large;
+    text-align:center;
+    border:2px solid black;
+}
+.stats-table {
+    width:75%;
+    font-weight:bold;
+    text-align:center;
+    border:2px solid black;
+}
+
+.stats-table, th {
+    text-align:center;
+}
