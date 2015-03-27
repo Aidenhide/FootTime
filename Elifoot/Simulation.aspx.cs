@@ -19,6 +19,8 @@ namespace Elifoot
         {
             using (var db = new TeamContext())
             {
+                var currentJorney = db.Journeys.Where(x => x.JourneyId == db.Leagues.FirstOrDefault().CurrentJourney).FirstOrDefault();
+                l_journey.Text = "Jornada Nº"+currentJorney.Number;
                 leagueRepeater.DataSource = db.Leagues.ToList();
                 leagueRepeater.DataBind();
             }
