@@ -94,6 +94,15 @@ namespace Elifoot {
         protected global::System.Web.UI.WebControls.Label l_fanAproval;
         
         /// <summary>
+        /// lk_beginJourney control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lk_beginJourney;
+        
+        /// <summary>
         /// repeaterTeam control.
         /// </summary>
         /// <remarks>

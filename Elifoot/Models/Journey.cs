@@ -39,5 +39,6 @@ namespace Elifoot.Models
         }
         private IList<Match> _Matchs;
 
+        public int Time { get; set; }
     }
 }

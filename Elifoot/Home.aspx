@@ -52,6 +52,9 @@
     <div class="row container">
         <div class="col-md-2 side-menu">
             <div class="row menu-option">
+                <asp:LinkButton ID="lk_beginJourney" Text="Começar Jornada" runat="server" CssClass="menu-lk" OnClick="lk_beginJourney_Click"/>
+            </div>
+            <div class="row menu-option">
                 <asp:LinkButton Text="Táctica" runat="server" CssClass="menu-lk"/>
             </div>
             <div class="row menu-option">

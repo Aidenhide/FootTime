@@ -177,11 +177,17 @@
     <Content Include="Account\ResetPassword.aspx" />
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="AdminPage.aspx" />
+    <Content Include="AfterGameStatistics.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\goal.png" />
+    <Content Include="Content\Images\goal15.png" />
+    <Content Include="Content\Images\goal20.png" />
+    <Content Include="Content\Images\RedCard15.png" />
+    <Content Include="Content\Images\yellowCard15.png" />
     <Content Include="Content\NameList.txt" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -320,6 +326,13 @@
     <Compile Include="AdminPage.aspx.designer.cs">
       <DependentUpon>AdminPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AfterGameStatistics.aspx.cs">
+      <DependentUpon>AfterGameStatistics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AfterGameStatistics.aspx.designer.cs">
+      <DependentUpon>AfterGameStatistics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -384,9 +397,38 @@
     <Compile Include="Migrations\201503261437377_sasfa.Designer.cs">
       <DependentUpon>201503261437377_sasfa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503311429413_ManagerChanged.cs" />
+    <Compile Include="Migrations\201503311429413_ManagerChanged.Designer.cs">
+      <DependentUpon>201503311429413_ManagerChanged.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503311436262_TeamChanged.cs" />
+    <Compile Include="Migrations\201503311436262_TeamChanged.Designer.cs">
+      <DependentUpon>201503311436262_TeamChanged.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503311615259_GameEventAdded.cs" />
+    <Compile Include="Migrations\201503311615259_GameEventAdded.Designer.cs">
+      <DependentUpon>201503311615259_GameEventAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503311619430_asdas.cs" />
+    <Compile Include="Migrations\201503311619430_asdas.Designer.cs">
+      <DependentUpon>201503311619430_asdas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503312037285_stuff.cs" />
+    <Compile Include="Migrations\201503312037285_stuff.Designer.cs">
+      <DependentUpon>201503312037285_stuff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504010953433_removeVirtualAttr.cs" />
+    <Compile Include="Migrations\201504010953433_removeVirtualAttr.Designer.cs">
+      <DependentUpon>201504010953433_removeVirtualAttr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504021419548_noideia.cs" />
+    <Compile Include="Migrations\201504021419548_noideia.Designer.cs">
+      <DependentUpon>201504021419548_noideia.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BuyingOffer.cs" />
     <Compile Include="Models\Context.cs" />
+    <Compile Include="Models\GameEvent.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Journey.cs" />
     <Compile Include="Models\League.cs" />
@@ -449,6 +491,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503261437377_sasfa.resx">
       <DependentUpon>201503261437377_sasfa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503311429413_ManagerChanged.resx">
+      <DependentUpon>201503311429413_ManagerChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503311436262_TeamChanged.resx">
+      <DependentUpon>201503311436262_TeamChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503311615259_GameEventAdded.resx">
+      <DependentUpon>201503311615259_GameEventAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503311619430_asdas.resx">
+      <DependentUpon>201503311619430_asdas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503312037285_stuff.resx">
+      <DependentUpon>201503312037285_stuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504010953433_removeVirtualAttr.resx">
+      <DependentUpon>201504010953433_removeVirtualAttr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504021419548_noideia.resx">
+      <DependentUpon>201504021419548_noideia.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -52,5 +52,26 @@ namespace Elifoot.Models
 
         public Referee referee { get; set; }
 
+
+        public virtual IList<GameEvent> GameEvents
+        {
+            get
+            {
+                if (_GameEvents != null)
+                    return _GameEvents;
+                else
+                {
+                    _GameEvents = new List<GameEvent>();
+                    return _GameEvents;
+                }
+                    
+            }
+            set
+            {
+                _GameEvents = value;
+            }
+        }
+
+        private IList<GameEvent> _GameEvents;
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using Elifoot.Models;
 using System.Threading;
+using System.Data.Entity;
+using System.IO;
 
 namespace Elifoot.Logic
 {
@@ -26,7 +28,7 @@ namespace Elifoot.Logic
             while (time < 91)
             {
                 Simulate(time);
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(10);
                 time++;
             }
             // Next journey
@@ -36,71 +38,272 @@ namespace Elifoot.Logic
         {
             using (var db = new TeamContext())
             {
-                foreach (League league in db.Leagues)
+                var leagues = db.Leagues.Include(x => x.Journeys).ToList();
+                var journeys = db.Journeys.Include(x => x.Matchs).ToList();
+                foreach (League league in leagues)
                 {
-                    var journey = db.Journeys.Where(x => x.JourneyId == league.CurrentJourney).FirstOrDefault();
-                    foreach (Match match in journey.Matchs)
+                    var journey = journeys.Where(x => x.JourneyId == league.CurrentJourney).FirstOrDefault();
+                    var allmatchs = db.Matches.Include(x => x.House).Include(x => x.Visitor).ToList();
+                    var matchs = allmatchs.Where(x => journey.Matchs.Contains(x)).ToList();
+                    foreach (Match match in matchs)
                     {
+                        journey.Time = time;
                         match.Time = time;
-                        CalculateMatch(match);
+                        CalculatePlay(match);
+                        if (time == 90)
+                        {
+                            double res = 100 * match.HouseBallTime / 90;
+                            match.HouseBallTime = (int)Math.Round(res, 0);
+                            res = 100 * match.VisitorBallTime / 90;
+                            match.VisitorBallTime = (int)Math.Round(res, 0);
+                        }
                     }
                 }
-                nextJorney(db.Leagues.ToList());
                 db.SaveChanges();
             }
         }
 
-        private void CalculateMatch(Match match)
+        private void CalculatePlay(Match m)
         {
-            var house = Randomizer.GetRandomizer.Next(100);
-            var visitor = Randomizer.GetRandomizer.Next(100);
-            if (house == 50)
+            if (FaultEvent(m))
             {
-                match.HouseScore++;
+                File.AppendAllText(@"C:\Users\Fabio Pacheco\Desktop\log.txt", "FALTA\n");
+                return;
             }
-            if (visitor == 50)
-            {
-                match.VisitorScore++;
-            }
+            File.AppendAllText(@"C:\Users\Fabio Pacheco\Desktop\log.txt", "-------------\n");
 
-            //if(WhoHasTheBall(match.House, match.Visitor) == 0) {
-            //    Attacking(match.House, match.Visitor);
-            //}
+            var apower = m.House.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
+            var bpower = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
+
+            var bpowerT = bpower + Randomizer.GetRandomizer.Next((int)Math.Floor(apower));
+            var apowerT = apower + Randomizer.GetRandomizer.Next((int)Math.Floor(bpower));
+            
+            if (apowerT > bpowerT)
+            {
+                m.HouseBallTime++;
+                HouseAttacking(m);
+                return;
+            }
+            m.VisitorBallTime++;
+            VisitiorAttacking(m);
+            return;
         }
 
-
-        private int WhoHasTheBall(Team a, Team b) 
+        private bool FaultEvent(Match m)
         {
-            var apower = a.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
-            var bpower = b.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
-            apower = apower + Randomizer.GetRandomizer.Next(50);
-            bpower = bpower + Randomizer.GetRandomizer.Next(50);
-
-            if (apower > bpower)
+            if (CardEvent(m))
             {
-                return 0;
+                return true;
             }
-            return 1;
+            var chance = Randomizer.GetRandomizer.Next(100);
+            if (chance < 5)
+            {
+                m.VisitorBallTime++;
+                m.HouseFaults++;
+                return true;
+            }
+            if (chance > 95)
+            {
+                m.HouseBallTime++;
+                m.VisitorFaults++;
+                return true;
+            }
+            return false;
         }
 
-        private void Attacking(Team Attacker, Team Defender)
+        private bool CardEvent(Match m)
         {
+            var chance = Randomizer.GetRandomizer.Next(100);
+            if (chance == 1)
+            {
+                m.VisitorBallTime++;
+                m.HouseFaults++;
+                var player = m.House.Players.ToList()[Randomizer.GetRandomizer.Next(m.House.Players.Count())];
+
+                var ge = new GameEvent();
+                chance = Randomizer.GetRandomizer.Next(100);
+                if (chance < 3)
+                {
+                    ge.Type = GameEventType.RedCard;
+                    ge.Icon = "../Content/Images/RedCard15.png";
+                }
+                else
+                {
+                    ge.Type = GameEventType.YellowCard;
+                    ge.Icon = "../Content/Images/yellowCard15.png";
+                }
+                ge.Time = m.Time;
+                ge.PlayerName = player.Name;
+                ge.Location = GameEventLocation.House;
+                m.GameEvents.Add(ge);
+                return true;
+            }
+            if (chance == 98)
+            {
+                m.HouseBallTime++;
+                m.VisitorFaults++;
+                var player = m.Visitor.Players.ToList()[Randomizer.GetRandomizer.Next(m.Visitor.Players.Count())];
+
+                var ge = new GameEvent();
+                chance = Randomizer.GetRandomizer.Next(100);
+                if (chance < 3)
+                {
+                    ge.Type = GameEventType.RedCard;
+                    ge.Icon = "../Content/Images/RedCard15.png";
+                }
+                else
+                {
+                    ge.Type = GameEventType.YellowCard;
+                    ge.Icon = "../Content/Images/yellowCard15.png";
+                }
+                ge.Time = m.Time;
+                ge.PlayerName = player.Name;
+                ge.Location = GameEventLocation.Visitor;
+                m.GameEvents.Add(ge);
+                return true;
+            }
+            return false;
+        }
+
+        private void HouseAttacking(Match m)
+        {
+            var Attacker = m.House;
+            var Defender = m.Visitor;
             var apower = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).Sum(x => x.OverallPower);
             var bpower = Defender.Players.Where(x => x.Position == PlayerPosition.Defender).Sum(x => x.OverallPower);
 
-            apower = apower + Randomizer.GetRandomizer.Next(50);
-            bpower = bpower + Randomizer.GetRandomizer.Next(50);
+            apower = apower + Randomizer.GetRandomizer.Next((int)Math.Floor(bpower));
+            bpower = bpower + Randomizer.GetRandomizer.Next((int)Math.Floor(apower));
+
 
             if (apower > bpower)
             {
-                var count = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
-                var r = Randomizer.GetRandomizer.Next(count);
-                var shooter = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
-                var keeper = Defender.Players.Where(x => x.Position == PlayerPosition.GoalKeeper);
-                // YOLO
+                if (HouseShoots(m))
+                {
+                    return;
+                }
+                else
+                {
+                    HouseCornerEvent(m);
+                }
             }
+            return;
+        }
 
-            
+        private void VisitiorAttacking(Match m)
+        {
+            var Attacker = m.Visitor;
+            var Defender = m.House;
+            var apower = Attacker.Players.Where(x => x.Position == PlayerPosition.Forward).Sum(x => x.OverallPower);
+            var bpower = Defender.Players.Where(x => x.Position == PlayerPosition.Defender).Sum(x => x.OverallPower);
+
+            apower = apower + Randomizer.GetRandomizer.Next((int)Math.Floor(bpower));
+            bpower = bpower + Randomizer.GetRandomizer.Next((int)Math.Floor(apower));
+
+            if (apower > bpower)
+            {
+                if (VisitorShoots(m))
+                {
+                    return;
+                }
+                else
+                {
+                    VisitorCornerEvent(m);
+                }
+            }
+            return;
+        }
+
+        private bool HouseShoots(Match m)
+        {
+            m.HouseShots++;
+            var count = m.House.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
+            var r = Randomizer.GetRandomizer.Next(count);
+            var shooter = m.House.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+            var keeper = m.Visitor.Players.Where(x => x.Position == PlayerPosition.GoalKeeper).FirstOrDefault();
+            // YOLO
+            var shootPower = shooter.OverallPower - keeper.OverallPower;
+
+            if (shootPower < 0) shootPower = 5;
+            else shootPower += 5;
+            var luck = Randomizer.GetRandomizer.Next(100);
+            if (luck < shootPower)
+            {
+                m.HouseScore++;
+                var ge = new GameEvent(GameEventType.Goal);
+                ge.Time = m.Time;
+                ge.PlayerName = shooter.Name;
+                ge.Location = GameEventLocation.House;
+                ge.Icon = "../Content/Images/goal15.png";
+                m.GameEvents.Add(ge);
+                return true;
+            }
+            return false;
+        }
+
+        private bool VisitorShoots(Match m)
+        {
+            m.VisitorShots++;
+            var count = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
+            var r = Randomizer.GetRandomizer.Next(count);
+            var shooter = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+            var keeper = m.House.Players.Where(x => x.Position == PlayerPosition.GoalKeeper).FirstOrDefault();
+            // YOLO
+            var shootPower = shooter.OverallPower - keeper.OverallPower;
+
+            if (shootPower < 0) shootPower = 5;
+            else shootPower += 5;
+
+
+            var luck = Randomizer.GetRandomizer.Next(100);
+            if (luck < shootPower)
+            {
+                m.VisitorScore++;
+                var ge = new GameEvent(GameEventType.Goal);
+                ge.Time = m.Time;
+                ge.PlayerName = shooter.Name;
+                ge.Location = GameEventLocation.Visitor;
+                ge.Icon = "../Content/Images/goal15.png";
+                m.GameEvents.Add(ge);
+                return true;
+            }
+            return false;
+        }
+
+        private bool HouseCornerEvent(Match m)
+        {
+            var chance = Randomizer.GetRandomizer.Next(100);
+            if (chance < 25)
+            {
+                m.HouseCorners++;
+                if (HouseShoots(m))
+                {
+                    return true;
+                }
+                else
+                {
+                    return HouseCornerEvent(m);
+                }
+            }
+            return false;
+        }
+
+        private bool VisitorCornerEvent(Match m)
+        {
+            var chance = Randomizer.GetRandomizer.Next(100);
+            if (chance < 25)
+            {
+                m.VisitorCorners++;
+                if (VisitorShoots(m))
+                {
+                    return true;
+                }
+                else
+                {
+                    return VisitorCornerEvent(m);
+                }
+            }
+            return false;
         }
 
         private void nextJorney(List<League> leagues)

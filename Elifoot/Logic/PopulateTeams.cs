@@ -28,6 +28,10 @@ namespace Elifoot.Logic
 
                 }
                 db.SaveChanges();
+
+                createManagers();
+                assignManagersToTeams();
+
                 foreach (League l in db.Leagues)
                 {
                     l.CurrentJourney = l.Journeys[0].JourneyId;
@@ -47,6 +51,7 @@ namespace Elifoot.Logic
                 var team = new Team(nameGenerator.Names[rand.Next(count)]);
                 team.Money = 10000000 / division;
                 team.Moral = 100;
+                team.humanControl = false;
                 CreatePlayers(team, division);
                 teamList.Add(team);
 
@@ -122,17 +127,33 @@ namespace Elifoot.Logic
 
         public static void CreatePlayers(Team team, int division)
         {
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < 3; i++)
             {
-                Player p = generatePlayer(division);
+                Player p = generatePlayer(division, PlayerPosition.GoalKeeper);
+                team.Players.Add(p);
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                Player p = generatePlayer(division, PlayerPosition.Defender);
+                team.Players.Add(p);
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                Player p = generatePlayer(division, PlayerPosition.Midfielder);
+                team.Players.Add(p);
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                Player p = generatePlayer(division, PlayerPosition.Forward);
                 team.Players.Add(p);
             }
         }
 
-        public static Player generatePlayer(int division)
+        public static Player generatePlayer(int division, PlayerPosition position)
         {
             var count = new NameGenerator().Names.Count;
             Player p = new Player(new NameGenerator().Names[rand.Next(count)] + " " + new NameGenerator().Names[rand.Next(count)]);
+            p.Position = position;
             p.Age = rand.Next(22) + 16;
             p.Injured = false;
             p.Nationality = Nationality.Portugal;
@@ -176,6 +197,38 @@ namespace Elifoot.Logic
             else
             {
                 return (5000) * ((50 - age) + power);
+            }
+        }
+
+        private static void createManagers()
+        {
+            using (var db = new TeamContext())
+            {
+                var count = 0;
+                while (count < 40)
+                {
+                    Manager m = new Manager(new NameGenerator().Names[(Randomizer.GetRandomizer.Next(new NameGenerator().Names.Count))],false);
+                    db.Managers.Add(m);
+                    count++;
+                }
+                db.SaveChanges();
+            }
+        }
+
+        private static void assignManagersToTeams()
+        {
+            using (var db = new TeamContext())
+            {
+                var teams = db.Teams.ToList();
+                var managers = db.Teams.ToList();
+
+                var count = 0;
+                foreach (Team t in teams)
+                {
+                    t.ManagerId = managers[count].ManagerId;
+                    count++;
+                }
+                db.SaveChanges();
             }
         }
     }

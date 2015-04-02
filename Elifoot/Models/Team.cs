@@ -39,7 +39,47 @@ namespace Elifoot.Models
         }
 
         private IList<Player> _Players;
-  
+
+        public virtual IList<Player> SelectedPlayers
+        {
+            get
+            {
+                if (_SelectedPlayers != null)
+                    return _SelectedPlayers;
+                else
+                {
+                    _SelectedPlayers = new List<Player>();
+                    return _SelectedPlayers;
+                }
+            }
+            set
+            {
+                _SelectedPlayers = value;
+            }
+        }
+
+        private IList<Player> _SelectedPlayers;
+
+        public virtual IList<Player> SelectedSubsPlayers
+        {
+            get
+            {
+                if (_SelectedSubsPlayers != null)
+                    return _SelectedSubsPlayers;
+                else
+                {
+                    _SelectedSubsPlayers = new List<Player>();
+                    return _SelectedSubsPlayers;
+                }
+            }
+            set
+            {
+                _SelectedSubsPlayers = value;
+            }
+        }
+
+        private IList<Player> _SelectedSubsPlayers;
+
         public int ManagerId { get; set; }
 
         public int StadiumId { get; set; }
@@ -47,6 +87,9 @@ namespace Elifoot.Models
         public decimal Moral { get; set; }
 
         public decimal Money { get; set; }
+
+        public bool humanControl { get; set; }
+
 
     }
 }

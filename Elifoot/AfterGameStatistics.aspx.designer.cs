@@ -10,7 +10,7 @@
 namespace Elifoot {
     
     
-    public partial class Simulation {
+    public partial class AfterGameStatistics {
         
         /// <summary>
         /// l_journey control.
@@ -20,24 +20,6 @@ namespace Elifoot {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label l_journey;
-        
-        /// <summary>
-        /// l_time control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label l_time;
-        
-        /// <summary>
-        /// I_test control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage I_test;
         
         /// <summary>
         /// leagueRepeater control.
