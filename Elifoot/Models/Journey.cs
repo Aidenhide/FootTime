@@ -6,12 +6,14 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class Journey
     {
         public Journey() { }
-        public Journey(string name)
+        public Journey(int number)
         {
-            Name = name;
+            Name = "Jornada " + number;
+            Number = number;
         }
         [Key]
         public int JourneyId { get; set; }
@@ -40,5 +42,7 @@ namespace Elifoot.Models
         private IList<Match> _Matchs;
 
         public int Time { get; set; }
+
+        public bool IsOver { get; set; }
     }
 }

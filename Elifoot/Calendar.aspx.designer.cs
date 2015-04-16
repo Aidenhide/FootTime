@@ -10,114 +10,96 @@
 namespace Elifoot {
     
     
-    public partial class NewGame {
+    public partial class Calendar {
         
         /// <summary>
-        /// div_page control.
+        /// ddl_journeys control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_page;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_journeys;
         
         /// <summary>
-        /// ddlplayers control.
+        /// l1_matchRepeaterDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlplayers;
+        protected global::System.Web.UI.WebControls.Repeater l1_matchRepeaterDetail;
         
         /// <summary>
-        /// div_p1 control.
+        /// l1_matchRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_p1;
+        protected global::System.Web.UI.WebControls.Repeater l1_matchRepeater;
         
         /// <summary>
-        /// tb_player1 control.
+        /// l2_matchRepeaterDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_player1;
+        protected global::System.Web.UI.WebControls.Repeater l2_matchRepeaterDetail;
         
         /// <summary>
-        /// div_p2 control.
+        /// l2_matchRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_p2;
+        protected global::System.Web.UI.WebControls.Repeater l2_matchRepeater;
         
         /// <summary>
-        /// tb_player2 control.
+        /// l3_matchRepeaterDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_player2;
+        protected global::System.Web.UI.WebControls.Repeater l3_matchRepeaterDetail;
         
         /// <summary>
-        /// div_p3 control.
+        /// l3_matchRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_p3;
+        protected global::System.Web.UI.WebControls.Repeater l3_matchRepeater;
         
         /// <summary>
-        /// tb_player3 control.
+        /// l4_matchRepeaterDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_player3;
+        protected global::System.Web.UI.WebControls.Repeater l4_matchRepeaterDetail;
         
         /// <summary>
-        /// div_p4 control.
+        /// l4_matchRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_p4;
+        protected global::System.Web.UI.WebControls.Repeater l4_matchRepeater;
         
         /// <summary>
-        /// tb_player4 control.
+        /// b_back control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_player4;
-        
-        /// <summary>
-        /// b_begin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button b_begin;
-        
-        /// <summary>
-        /// l_error control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label l_error;
+        protected global::System.Web.UI.WebControls.Button b_back;
     }
 }

@@ -6,35 +6,107 @@ using Elifoot.Models;
 using System.Threading;
 using System.Data.Entity;
 using System.IO;
+using System.Diagnostics;
 
 namespace Elifoot.Logic
 {
-    public class MatchManager
+
+
+    public delegate void NotificationsReceivedDelegate(bool humanRequired, GameEvent gameEvent);
+
+    public static class MatchManager
     {
-        public MatchManager()
-        {
+        public static event NotificationsReceivedDelegate NewNotificationsReceived;
 
+        private static Thread game;
+
+        public static bool IsPaused { get; set; }
+
+        public static Thread Game
+        {
+            get { return game; }
+            set { game = value; }
         }
 
-        public void beginSimulation()
+        public static void beginSimulation()
         {
-            Thread s = new Thread(new ThreadStart(ThreadSimulation));
-            s.Start();
-        }
-
-        public void ThreadSimulation()
-        {
-            var time = 0;
-            while (time < 91)
+            if (game == null)
             {
-                Simulate(time);
-                System.Threading.Thread.Sleep(10);
-                time++;
+                game = new Thread(new ThreadStart(ThreadSimulation));
+                IsPaused = false;
+                game.Start();
             }
-            // Next journey
+            else
+            {
+                if (game.ThreadState == System.Threading.ThreadState.Running)
+                {
+                    // do nothing
+                }
+                if (game.ThreadState == System.Threading.ThreadState.Unstarted
+                    || game.ThreadState == System.Threading.ThreadState.Aborted
+                        || game.ThreadState == System.Threading.ThreadState.Stopped
+                            || game.ThreadState == System.Threading.ThreadState.Suspended
+                                || game.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
+                {
+                    game.Abort();
+                    game = new Thread(new ThreadStart(ThreadSimulation));
+                    IsPaused = false;
+                    game.Start();
+                }
+            }
+
+
+
         }
 
-        private void Simulate(int time)
+        public static void ThreadSimulation()
+        {
+            try
+            {
+                var time = 0;
+                using (var db = new TeamContext())
+                {
+                    var leagues = db.Leagues.Include(x => x.Journeys).FirstOrDefault();
+                    var journey = leagues.Journeys.Where(x => x.JourneyId == leagues.CurrentJourney).FirstOrDefault();
+                    time = journey.Time;
+                }
+
+                var running = true;
+                while (running)
+                {
+                    if (!IsPaused && time < 91)
+                    {
+                        Simulate(time);
+                        System.Threading.Thread.Sleep(50);
+                        if (NewNotificationsReceived != null)
+                        {
+                            NewNotificationsReceived(false, null);
+                        }
+                        time++;
+                    }
+                    if (time > 90)
+                    {
+                        using (var db = new TeamContext())
+                        {
+                            var leagues = db.Leagues.Include(x => x.Journeys).ToList();
+                            System.Threading.Thread.Sleep(1000);
+                            nextJorney(leagues);
+                            System.Threading.Thread.Sleep(1000);
+                            db.SaveChanges();
+                        }
+                        running = false;
+                    }
+                    if (IsPaused)
+                        System.Threading.Thread.Sleep(1000);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("ERRROOO:" + e.Message);
+            }
+        }
+
+        private static void Simulate(int time)
         {
             using (var db = new TeamContext())
             {
@@ -56,28 +128,32 @@ namespace Elifoot.Logic
                             match.HouseBallTime = (int)Math.Round(res, 0);
                             res = 100 * match.VisitorBallTime / 90;
                             match.VisitorBallTime = (int)Math.Round(res, 0);
+
                         }
                     }
+                    if (time == 90)
+                    {
+                        journey.IsOver = true;
+                    }
+
                 }
                 db.SaveChanges();
             }
         }
 
-        private void CalculatePlay(Match m)
+        private static void CalculatePlay(Match m)
         {
             if (FaultEvent(m))
             {
-                File.AppendAllText(@"C:\Users\Fabio Pacheco\Desktop\log.txt", "FALTA\n");
                 return;
             }
-            File.AppendAllText(@"C:\Users\Fabio Pacheco\Desktop\log.txt", "-------------\n");
 
             var apower = m.House.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
             var bpower = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Midfielder).Sum(x => x.OverallPower);
 
             var bpowerT = bpower + Randomizer.GetRandomizer.Next((int)Math.Floor(apower));
             var apowerT = apower + Randomizer.GetRandomizer.Next((int)Math.Floor(bpower));
-            
+
             if (apowerT > bpowerT)
             {
                 m.HouseBallTime++;
@@ -89,7 +165,7 @@ namespace Elifoot.Logic
             return;
         }
 
-        private bool FaultEvent(Match m)
+        private static bool FaultEvent(Match m)
         {
             if (CardEvent(m))
             {
@@ -111,7 +187,7 @@ namespace Elifoot.Logic
             return false;
         }
 
-        private bool CardEvent(Match m)
+        private static bool CardEvent(Match m)
         {
             var chance = Randomizer.GetRandomizer.Next(100);
             if (chance == 1)
@@ -136,6 +212,7 @@ namespace Elifoot.Logic
                 ge.PlayerName = player.Name;
                 ge.Location = GameEventLocation.House;
                 m.GameEvents.Add(ge);
+
                 return true;
             }
             if (chance == 98)
@@ -156,16 +233,18 @@ namespace Elifoot.Logic
                     ge.Type = GameEventType.YellowCard;
                     ge.Icon = "../Content/Images/yellowCard15.png";
                 }
+
                 ge.Time = m.Time;
                 ge.PlayerName = player.Name;
                 ge.Location = GameEventLocation.Visitor;
                 m.GameEvents.Add(ge);
+
                 return true;
             }
             return false;
         }
 
-        private void HouseAttacking(Match m)
+        private static void HouseAttacking(Match m)
         {
             var Attacker = m.House;
             var Defender = m.Visitor;
@@ -190,7 +269,7 @@ namespace Elifoot.Logic
             return;
         }
 
-        private void VisitiorAttacking(Match m)
+        private static void VisitiorAttacking(Match m)
         {
             var Attacker = m.Visitor;
             var Defender = m.House;
@@ -214,14 +293,17 @@ namespace Elifoot.Logic
             return;
         }
 
-        private bool HouseShoots(Match m)
+        private static bool HouseShoots(Match m)
         {
             m.HouseShots++;
-            var count = m.House.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
-            var r = Randomizer.GetRandomizer.Next(count);
-            var shooter = m.House.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+
+            var shooter = getShooter(m.House);
+            while (shooter == null)
+            {
+                shooter = getShooter(m.House);
+            }
+
             var keeper = m.Visitor.Players.Where(x => x.Position == PlayerPosition.GoalKeeper).FirstOrDefault();
-            // YOLO
             var shootPower = shooter.OverallPower - keeper.OverallPower;
 
             if (shootPower < 0) shootPower = 5;
@@ -235,20 +317,39 @@ namespace Elifoot.Logic
                 ge.PlayerName = shooter.Name;
                 ge.Location = GameEventLocation.House;
                 ge.Icon = "../Content/Images/goal15.png";
+
+                try
+                {
+                    ge.Team = m.HouseName;
+                    ge.OtherTeam = m.VisitorName;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERRO 4 " + e.Message);
+                }
                 m.GameEvents.Add(ge);
+
+                if ((m.IsHouseHuman || m.IsVisitorHuman) && NewNotificationsReceived != null)
+                {
+                    //IsPaused = true;
+                    NewNotificationsReceived(true, ge);
+                }
                 return true;
             }
             return false;
         }
 
-        private bool VisitorShoots(Match m)
+        private static bool VisitorShoots(Match m)
         {
             m.VisitorShots++;
-            var count = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
-            var r = Randomizer.GetRandomizer.Next(count);
-            var shooter = m.Visitor.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+
+            var shooter = getShooter(m.Visitor);
+            while (shooter == null)
+            {
+                shooter = getShooter(m.Visitor);
+            }
+
             var keeper = m.House.Players.Where(x => x.Position == PlayerPosition.GoalKeeper).FirstOrDefault();
-            // YOLO
             var shootPower = shooter.OverallPower - keeper.OverallPower;
 
             if (shootPower < 0) shootPower = 5;
@@ -264,13 +365,57 @@ namespace Elifoot.Logic
                 ge.PlayerName = shooter.Name;
                 ge.Location = GameEventLocation.Visitor;
                 ge.Icon = "../Content/Images/goal15.png";
-                m.GameEvents.Add(ge);
+
+                try
+                {
+                    ge.Team = m.VisitorName;
+                    ge.OtherTeam = m.HouseName;
+                    m.GameEvents.Add(ge);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERRO 5 " + e.Message);
+                }
+
+                if ((m.IsHouseHuman || m.IsVisitorHuman) && NewNotificationsReceived != null)
+                {
+                    //IsPaused = true;
+                    NewNotificationsReceived(true, ge);
+                }
                 return true;
             }
             return false;
         }
 
-        private bool HouseCornerEvent(Match m)
+        private static Player getShooter(Team m)
+        {
+            var r = Randomizer.GetRandomizer.Next(10);
+            var count = 0;
+            var shooter = new Player();
+            if (r > 5)
+            {
+                count = m.Players.Where(x => x.Position == PlayerPosition.Forward).Count();
+                r = Randomizer.GetRandomizer.Next(count);
+                return m.Players.Where(x => x.Position == PlayerPosition.Forward).ToList()[r];
+            }
+            else if ((r > 2 && r <= 5) || count == 0)
+            {
+                count = m.Players.Where(x => x.Position == PlayerPosition.Midfielder).Count();
+                r = Randomizer.GetRandomizer.Next(count);
+                return m.Players.Where(x => x.Position == PlayerPosition.Midfielder).ToList()[r];
+            }
+            else if (r <= 2 || count == 0)
+            {
+                count = m.Players.Where(x => x.Position == PlayerPosition.Defender).Count();
+                r = Randomizer.GetRandomizer.Next(count);
+                return m.Players.Where(x => x.Position == PlayerPosition.Defender).ToList()[r];
+            }
+            return null;
+        }
+
+
+
+        private static bool HouseCornerEvent(Match m)
         {
             var chance = Randomizer.GetRandomizer.Next(100);
             if (chance < 25)
@@ -288,7 +433,7 @@ namespace Elifoot.Logic
             return false;
         }
 
-        private bool VisitorCornerEvent(Match m)
+        private static bool VisitorCornerEvent(Match m)
         {
             var chance = Randomizer.GetRandomizer.Next(100);
             if (chance < 25)
@@ -306,7 +451,7 @@ namespace Elifoot.Logic
             return false;
         }
 
-        private void nextJorney(List<League> leagues)
+        private static void nextJorney(List<League> leagues)
         {
             foreach (League l in leagues)
             {

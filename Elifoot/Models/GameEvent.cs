@@ -6,6 +6,7 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class GameEvent
     {
         public GameEvent() { }
@@ -23,6 +24,12 @@ namespace Elifoot.Models
         public int Time { get; set; }
 
         public string PlayerName { get; set; }
+
+        public string SecondPlayerName { get; set; }
+
+        public string Team { get; set; }
+
+        public string OtherTeam { get; set; }
 
         public GameEventLocation Location { get; set; }
     }

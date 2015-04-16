@@ -7,13 +7,48 @@ using System.Web.UI.WebControls;
 using Elifoot.Models;
 using System.Data.Entity;
 using System.Web.UI.HtmlControls;
+using Elifoot.Logic;
+using System.Diagnostics;
 namespace Elifoot
 {
+
     public partial class Simulation : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             loadMatchs();
+            MatchManager.NewNotificationsReceived -= MatchManager_NewNotificationsReceived;
+            MatchManager.NewNotificationsReceived += MatchManager_NewNotificationsReceived;
+        }
+
+        protected void GetTime(object sender, EventArgs e)
+        {
+            lblTime.Text = DateTime.Now.ToString("hh:mm:ss tt");
+        }
+
+
+        void MatchManager_NewNotificationsReceived(bool humanRequired, GameEvent gameEvent)
+        {
+            //if (humanRequired)
+            //{
+
+            //    if (gameEvent.Type == GameEventType.Goal)
+            //    {
+            //        l_eventHeader.Text = "GOLO!";
+            //        l_eventBody.Text = "O jogador " + gameEvent.PlayerName + " remate a bola para o fundo das redes!\n" +
+            //            "Golo para a equipa " + gameEvent.Team;
+            //    }
+            //    div_event.Attributes.CssStyle["Display"] = "block";
+            //    div_page.Attributes.CssStyle["-webkit-filter"] = "blur(5px) grayscale(50%)";
+            //    div_page.Attributes.CssStyle["pointer-events"] = "none";
+            //    div_event.Attributes.CssStyle["pointer-events"] = "auto";
+            //    loadMatchs();
+            //    return;
+            //}
+            //else
+            //{
+            //   // b_up_Click(null, null);
+            //}
         }
 
         public void loadMatchs()
@@ -23,12 +58,15 @@ namespace Elifoot
                 var leagues = db.Leagues.Include(x => x.Journeys).ToList();
                 var journeys = db.Journeys.Include(x => x.Matchs).ToList();
                 var currentJorney = journeys.Where(x => x.JourneyId == leagues.FirstOrDefault().CurrentJourney).FirstOrDefault();
-                l_journey.Text = "Jornada Nº" + currentJorney.Number;
-                l_time.Text = currentJorney.Time.ToString();
-                if (currentJorney.Time == 90)
+
+                if (currentJorney.IsOver)
                 {
                     Response.Redirect("AfterGameStatistics.aspx");
                 }
+
+                l_journey.Text = "Jornada Nº" + currentJorney.Number;
+                l_time.Text = currentJorney.Time.ToString();
+                
                 leagueRepeater.DataSource = leagues;
                 leagueRepeater.DataBind();
             }
@@ -70,6 +108,15 @@ namespace Elifoot
                 }
             }
         }
+
+        protected void b_closeModal_Click(object sender, EventArgs e)
+        {
+            MatchManager.IsPaused = false;
+            div_event.Attributes.CssStyle["Display"] = "none";
+            div_page.Attributes.CssStyle["-webkit-filter"] = "";
+            div_page.Attributes.CssStyle["pointer-events"] = "auto";
+            div_event.Attributes.CssStyle["pointer-events"] = "none";
+        }
     }
-        
+
 }

@@ -178,6 +178,7 @@
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="AdminPage.aspx" />
     <Content Include="AfterGameStatistics.aspx" />
+    <Content Include="Calendar.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -186,7 +187,11 @@
     <Content Include="Content\Images\goal.png" />
     <Content Include="Content\Images\goal15.png" />
     <Content Include="Content\Images\goal20.png" />
+    <Content Include="Content\Images\manager20.png" />
     <Content Include="Content\Images\RedCard15.png" />
+    <Content Include="Content\Images\shirt20.png" />
+    <Content Include="Content\Images\shirtSelected20.png" />
+    <Content Include="Content\Images\shirtSubs20.png" />
     <Content Include="Content\Images\yellowCard15.png" />
     <Content Include="Content\NameList.txt" />
     <Content Include="Content\Site.css" />
@@ -344,6 +349,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -424,6 +436,26 @@
     <Compile Include="Migrations\201504021419548_noideia.cs" />
     <Compile Include="Migrations\201504021419548_noideia.Designer.cs">
       <DependentUpon>201504021419548_noideia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504081629503_class2.cs" />
+    <Compile Include="Migrations\201504081629503_class2.Designer.cs">
+      <DependentUpon>201504081629503_class2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504091619377_tees.cs" />
+    <Compile Include="Migrations\201504091619377_tees.Designer.cs">
+      <DependentUpon>201504091619377_tees.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504100843413_matchHuman.cs" />
+    <Compile Include="Migrations\201504100843413_matchHuman.Designer.cs">
+      <DependentUpon>201504100843413_matchHuman.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504101040152_gameEventUp.cs" />
+    <Compile Include="Migrations\201504101040152_gameEventUp.Designer.cs">
+      <DependentUpon>201504101040152_gameEventUp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504130833138_asdasdsfasfa.cs" />
+    <Compile Include="Migrations\201504130833138_asdasdsfasfa.Designer.cs">
+      <DependentUpon>201504130833138_asdasdsfasfa.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BuyingOffer.cs" />
@@ -512,6 +544,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504021419548_noideia.resx">
       <DependentUpon>201504021419548_noideia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504081629503_class2.resx">
+      <DependentUpon>201504081629503_class2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504091619377_tees.resx">
+      <DependentUpon>201504091619377_tees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504100843413_matchHuman.resx">
+      <DependentUpon>201504100843413_matchHuman.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504101040152_gameEventUp.resx">
+      <DependentUpon>201504101040152_gameEventUp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504130833138_asdasdsfasfa.resx">
+      <DependentUpon>201504130833138_asdasdsfasfa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

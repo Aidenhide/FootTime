@@ -7,7 +7,7 @@
             <span>Resultados </span>
             <asp:Label ID="l_journey" runat="server"></asp:Label>
         </h3>
-
+        <asp:Button runat="server" Text="Próxima Jornada" OnClick="b_nextJorney_Click"/>
         <asp:Repeater ID="leagueRepeater" runat="server" OnItemDataBound="leagueRepeater_ItemDataBound">
             <ItemTemplate>
                 <div class="row text-center" style="border:2px solid black; border-radius:2px 2px;">
@@ -108,6 +108,7 @@
                 <hr />
             </ItemTemplate>
         </asp:Repeater>
+        <asp:Button runat="server" Text="Próxima Jornada" OnClick="b_nextJorney_Click"/>
     </div>
 
 </asp:Content>

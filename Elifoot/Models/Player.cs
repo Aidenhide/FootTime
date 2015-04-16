@@ -6,6 +6,7 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class Player
     {
         public Player() { }
@@ -46,6 +47,10 @@ namespace Elifoot.Models
         public decimal Experience { get; set; }
 
         public decimal OverallPower { get; set; }
+
+        public bool Selected { get; set; }
+
+        public bool SubSelected { get; set; }
     }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Elifoot.Models;
+using System.Drawing;
 
 namespace Elifoot.Logic
 {
@@ -53,10 +54,46 @@ namespace Elifoot.Logic
                 team.Moral = 100;
                 team.humanControl = false;
                 CreatePlayers(team, division);
+
+                Random randomGen = Randomizer.GetRandomizer;
+                KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+                Color text = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
+                Color background = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
+
+                while (!checkColorDiff(text,background))
+                {
+                    text = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
+                    background = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
+                }
+
+                team.ForegroundColor = String.Format("rgb({0},{1},{2})",text.R, text.G, text.B);
+                team.BackgroundColor = String.Format("rgb({0},{1},{2})",background.R, background.G, background.B);
+
                 teamList.Add(team);
 
             }
             return teamList;
+        }
+
+        public static bool checkColorDiff(Color Text, Color Background)
+        {
+
+            var hue = Math.Max((Text.R - Background.R),(Background.R - Text.R)) + 
+                Math.Max((Text.G - Background.G),(Background.G - Text.G)) +
+                    Math.Max((Text.B - Background.B),(Background.B - Text.B));
+            if(hue < 500) 
+            {
+                return false;
+            }
+
+            var bright = Math.Abs(((Text.R*299) + (Text.G*587) + (Text.B*114)) - 
+                ((Background.R*299) + (Background.G*587) + (Background.B*114)));
+
+            if (bright < 125)
+            {
+                return false;
+            }
+            return true;
         }
 
 
@@ -81,17 +118,24 @@ namespace Elifoot.Logic
 
             List<Journey> leagueJourneys = new List<Journey>();
 
-            while (homeTeams[1].TeamId != controlTeam.TeamId || journeyCount <= 1)
+            while (homeTeams[1].TeamId != controlTeam.TeamId || journeyCount <= 8)
             {
-                Journey j = new Journey(journeyCount.ToString());
+                Journey j = new Journey(journeyCount + 1);
+                j.IsOver = false;
 
                 for (int i = 0; i < homeTeams.Count; i++)
                 {
                     Match m;
                     if (controlVar % 2 == 0)
+                    {
                         m = new Match(homeTeams[i], awayTeams[i]);
+                        getTeamsColors(m, homeTeams[i], awayTeams[i]);
+                    }
                     else
+                    {
                         m = new Match(awayTeams[i], homeTeams[i]);
+                        getTeamsColors(m, awayTeams[i], homeTeams[i]);
+                    }
                     j.Matchs.Add(m);
                 }
                 leagueJourneys.Add(j);
@@ -111,11 +155,13 @@ namespace Elifoot.Logic
             {
                 Journey j = leagueJourneys[i];
 
-                Journey srJourney = new Journey((journeyCount + i).ToString());
+                Journey srJourney = new Journey((journeyCount + i + 1));
+                srJourney.IsOver = false;
 
                 foreach (Match frMatch in j.Matchs)
                 {
                     Match srMatch = new Match(frMatch.Visitor, frMatch.House);
+                    getTeamsColors(srMatch, frMatch.Visitor, frMatch.House);
                     srJourney.Matchs.Add(srMatch);
                 }
 
@@ -124,6 +170,15 @@ namespace Elifoot.Logic
             }
             return true;
         }
+
+        public static void getTeamsColors(Match m, Team house, Team visitor)
+        {
+            m.HouseBackgroundColor = house.BackgroundColor;
+            m.HouseForegroundColor = house.ForegroundColor;
+            m.VisitorBackgroundColor = visitor.BackgroundColor;
+            m.VisitorForegroundColor = visitor.ForegroundColor;
+        }
+
 
         public static void CreatePlayers(Team team, int division)
         {
@@ -207,7 +262,7 @@ namespace Elifoot.Logic
                 var count = 0;
                 while (count < 40)
                 {
-                    Manager m = new Manager(new NameGenerator().Names[(Randomizer.GetRandomizer.Next(new NameGenerator().Names.Count))],false);
+                    Manager m = new Manager(new NameGenerator().Names[(Randomizer.GetRandomizer.Next(new NameGenerator().Names.Count))], false);
                     db.Managers.Add(m);
                     count++;
                 }

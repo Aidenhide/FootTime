@@ -6,6 +6,7 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class Manager
     {
         public Manager() { }

@@ -6,6 +6,7 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class League
     {
         public League() { }
@@ -89,93 +90,5 @@ namespace Elifoot.Models
         }
 
         private IList<Referee> _Referees;
-
-
-        public Classification GetClassification()
-        {
-            return new Classification(this);
-        }
-    }
-
-    public class Classification
-    {
-        private League _league;
-
-        public Classification(League l)
-        {
-            _league = l;
-            this.CalculateMatches();
-        }
-
-        private void CalculateMatches()
-        {
-            List<Journey> _playedJourneys = _league.Journeys.Where(x => (x.Number <= _league.CurrentJourney)).ToList();
-
-            Dictionary<Team, ClassificationItem> _classificationByTeam = new Dictionary<Team, ClassificationItem>();
-
-            foreach(Team t in _league.Teams)
-            {
-                _classificationByTeam[t] = new ClassificationItem();
-            }
-
-            foreach (Journey j in _playedJourneys)
-            {
-                foreach(Match m in j.Matchs)
-                {
-                    _classificationByTeam[m.House].UpdateClassification(m);
-                    _classificationByTeam[m.Visitor].UpdateClassification(m);
-                }
-            }
-        }
-    }
-
-
-    public class ClassificationItem
-    {
-        private Team _team;
-        private int _points=0;
-        private int _matchesWon=0;
-        private int _matchesLost=0;
-        private int _matchesDrawn=0;
-        private int _scoredGoals=0;
-        private int _againstGoals=0;
-
-
-        public ClassificationItem()
-        {
-        }
-
-        public void UpdateClassification(Match m)
-        {
-            if (m.HouseScore == m.VisitorScore) //DRAW
-            {
-                _matchesDrawn++;
-                _points++;
-            }
-
-            if (m.House.TeamId == _team.TeamId)
-            {
-                _scoredGoals += m.HouseScore;
-                _againstGoals += m.VisitorScore;                
-
-                if (m.HouseScore > m.VisitorScore)  //WIN
-                {
-                    _matchesWon++;
-                    _points += 3;
-                    return;
-                }
-                
-                if (m.HouseScore < m.VisitorScore)  //LOST
-                {
-                    _matchesLost++;
-                    return;
-                }
-            }
-            else
-            {
-                _scoredGoals += m.VisitorScore;
-                _againstGoals += m.HouseScore;
-            }
-        }
     }
 }

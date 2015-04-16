@@ -67,43 +67,46 @@ namespace Elifoot.Logic
         {
             using (var db = new TeamContext())
             {
-                var t = db.Teams.Include(x => x.SelectedPlayers).Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var t = db.Teams.Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var SelectedPlayers = t.Players.Where(x => x.Selected == true).ToList();
+                var SelectedSubsPlayers = t.Players.Where(x => x.SubSelected == true).ToList();
+                var p = t.Players.Where(x => x.PlayerId == player.PlayerId).FirstOrDefault();
                 if (t != null)
                 {
-                    if (team.SelectedPlayers.Count == 11)
+                    if (SelectedPlayers.Count == 11)
                     {
                         return 0; // MAX PLAYERS
                     }
-                    if (team.SelectedPlayers.Count == 10 &&
-                        team.SelectedPlayers.Where(x => x.Position == PlayerPosition.GoalKeeper).ToList().Count == 0 &&
+                    if (SelectedPlayers.Count == 10 &&
+                        SelectedPlayers.Where(x => x.Position == PlayerPosition.GoalKeeper).ToList().Count == 0 &&
                         player.Position != PlayerPosition.GoalKeeper)
                     {
                         return 1; // GOALKEEPER NEEEDED
                     }
-                    if (team.SelectedPlayers.Count == 8 &&
-                        team.SelectedPlayers.Where(x => x.Position == PlayerPosition.Defender).ToList().Count == 0 &&
+                    if (SelectedPlayers.Count == 8 &&
+                        SelectedPlayers.Where(x => x.Position == PlayerPosition.Defender).ToList().Count == 0 &&
                         player.Position != PlayerPosition.Defender)
                     {
                         return 2; // DEFENDER NEEEDED
                     }
-                    if (team.SelectedPlayers.Count == 8 &&
-                        team.SelectedPlayers.Where(x => x.Position == PlayerPosition.Midfielder).ToList().Count == 0 &&
+                    if (SelectedPlayers.Count == 8 &&
+                        SelectedPlayers.Where(x => x.Position == PlayerPosition.Midfielder).ToList().Count == 0 &&
                         player.Position != PlayerPosition.Midfielder)
                     {
                         return 3; // MIDFIELDER NEEEDED
                     }
-                    if (team.SelectedPlayers.Count == 8 &&
-                        team.SelectedPlayers.Where(x => x.Position == PlayerPosition.Forward).ToList().Count == 0 &&
+                    if (SelectedPlayers.Count == 8 &&
+                        SelectedPlayers.Where(x => x.Position == PlayerPosition.Forward).ToList().Count == 0 &&
                         player.Position != PlayerPosition.Forward)
                     {
                         return 4; // FORWARD NEEEDED
                     }
                     if(player.Position == PlayerPosition.GoalKeeper &&
-                       team.SelectedPlayers.Where(x => x.Position == PlayerPosition.GoalKeeper).ToList().Count != 0)
+                       SelectedPlayers.Where(x => x.Position == PlayerPosition.GoalKeeper).ToList().Count != 0)
                     {
                         return 5; // MAX GOALKEEPERS
                     }
-                    team.SelectedPlayers.Add(player);
+                    p.Selected = true;
                     db.SaveChanges();
                     return 6; // SUCCESS
                 }
@@ -115,12 +118,14 @@ namespace Elifoot.Logic
         {
             using (var db = new TeamContext())
             {
-                var t = db.Teams.Include(x => x.SelectedPlayers).Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var t = db.Teams.Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var SelectedSubsPlayers = t.Players.Where(x => x.SubSelected == true).ToList();
+                var p = t.Players.Where(x => x.PlayerId == player.PlayerId).FirstOrDefault();
                 if (t != null)
                 {
-                    if (team.SelectedSubsPlayers.Count < 7)
+                    if (SelectedSubsPlayers.Count < 7)
                     {
-                        team.SelectedSubsPlayers.Add(player);
+                        p.SubSelected = true;
                         db.SaveChanges();
                         return true;
                     }
@@ -133,10 +138,11 @@ namespace Elifoot.Logic
         {
             using (var db = new TeamContext())
             {
-                var t = db.Teams.Include(x => x.SelectedPlayers).Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var t = db.Teams.Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var p = t.Players.Where(x => x.PlayerId == player.PlayerId).FirstOrDefault();
                 if (t != null)
                 {
-                    t.SelectedPlayers.Remove(player);
+                    p.Selected = false;
                     db.SaveChanges();
                     return true;
                 }
@@ -148,10 +154,11 @@ namespace Elifoot.Logic
         {
             using (var db = new TeamContext())
             {
-                var t = db.Teams.Include(x => x.SelectedPlayers).Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var t = db.Teams.Include(x => x.Players).Where(x => x.TeamId == team.TeamId).FirstOrDefault();
+                var p = t.Players.Where(x => x.PlayerId == player.PlayerId).FirstOrDefault();
                 if (t != null)
                 {
-                    t.SelectedSubsPlayers.Remove(player);
+                    p.SubSelected = false;
                     db.SaveChanges();
                     return true;
                 }

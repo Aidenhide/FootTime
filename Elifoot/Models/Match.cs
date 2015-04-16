@@ -6,6 +6,7 @@ using System.Web;
 
 namespace Elifoot.Models
 {
+    [Serializable]
     public class Match
     {
         public Match() { }
@@ -50,6 +51,16 @@ namespace Elifoot.Models
 
         public int VisitorShots { get; set; }
 
+        public bool IsHouseHuman { get; set; }
+
+        public bool IsVisitorHuman { get; set; }
+
+        public string HouseForegroundColor { get; set; }
+        public string HouseBackgroundColor { get; set; }
+
+        public string VisitorForegroundColor { get; set; }
+        public string VisitorBackgroundColor { get; set; }
+       
         public Referee referee { get; set; }
 
 

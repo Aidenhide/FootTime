@@ -40,5 +40,10 @@ namespace Elifoot
                 matchRepeater.DataBind();
             }
         }
+
+        protected void b_nextJorney_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Home.aspx");
+        }
     }
 }

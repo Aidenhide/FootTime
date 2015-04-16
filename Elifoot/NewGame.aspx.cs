@@ -6,16 +6,18 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using System.Data.Entity;
+using System.Threading;
 namespace Elifoot
 {
     public partial class NewGame : System.Web.UI.Page
     {
+        public int Count { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
-
         protected void ddlplayers_SelectedIndexChanged(object sender, EventArgs e)
         {
             var ddl = sender as DropDownList;
@@ -100,11 +102,25 @@ namespace Elifoot
                     teams[i].humanControl = true;
                 }
                 db.SaveChanges();
+                var matchs = db.Matches.Include(x => x.House).Where(x=> x.House.humanControl == true).ToList();
+                foreach (Match m in matchs)
+                {
+                    m.IsHouseHuman = true;
+                }
+                matchs = db.Matches.Include(x => x.Visitor).Where(x => x.Visitor.humanControl == true).ToList();
+                foreach (Match m in matchs)
+                {
+                    m.IsVisitorHuman = true;
+                }
+
+                db.SaveChanges();
                 Response.Redirect("Home.aspx");
             }
 
 
             
         }
+
+
     }
 }
